@@ -110,6 +110,8 @@ Edit `vars/goauth.yml` with:
 ```bash
 ansible-vault --ask-vault-pass edit vars/goauth.yml
 ```
+You will need to answer the _ansible vault_ password, for this example will be
+`password-example`.
 
 The content looks like:
 
