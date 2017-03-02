@@ -1,0 +1,17 @@
+---
+- name: install locales
+  apt:
+    name: locales
+    state: present
+  tags: locale
+
+- name: Build | generate the missing locale and reconfigure locales
+  command: locale-gen --purge en_US.UTF-8
+  ignore_errors: true
+  tags: locale
+
+- name: Build | Reconfigure locales
+  command: echo -e 'LANG="en_US.UTF-8"\nLANGUAGE="en_US:en"\n' > /etc/default/locale
+  ignore_errors: true
+  tags: locale
+

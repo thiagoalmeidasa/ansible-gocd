@@ -1,0 +1,4 @@
+---
+
+- include: roles/common/handlers/ntp.yml
+  tags: time,ntp

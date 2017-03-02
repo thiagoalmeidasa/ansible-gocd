@@ -1,0 +1,53 @@
+---
+- name: Update cache and install some gocd dependencies
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - git
+    state: present
+    update_cache: yes
+  tags: gocd,gocd-setup
+
+- name: Enable backports repo
+  apt_repository:
+    repo: deb http://ftp.debian.org/debian jessie-backports main
+    state: present
+    filename: 'backports'
+  tags: gocd,gocd-setup,gocd-backports-repo
+
+- name: Update cache and install java8
+  apt:
+    name: java8-runtime-headless
+    default_release: jessie-backports
+    state: present
+    update_cache: yes
+  tags: gocd,gocd-setup,java-setup
+
+- name: Receive apt-key from gocd server
+  apt_key:
+    url: https://download.gocd.io/GOCD-GPG-KEY.asc
+    state: present
+  tags: gocd,gocd-setup,gocd-key
+
+- name: Enable gocd repo
+  apt_repository:
+    repo: deb https://download.gocd.io /
+    state: present
+    filename: 'goserver'
+  tags: gocd,gocd-setup,gocd-repo
+
+- name: Update cache and install gocd
+  apt:
+    name: go-server
+    state: present
+    update_cache: yes
+  notify: start go-server
+  tags: gocd,gocd-setup
+
+- name: Update gocd GO_SERVER_SYSTEM_PROPERTIES
+  lineinfile:
+    path: /etc/default/go-server
+    line: "GO_SERVER_SYSTEM_PROPERTIES='{{ GO_SERVER_SYSTEM_PROPERTIES }}'"
+  notify: start go-server
+  tags: gocd,gocd-properties-setup

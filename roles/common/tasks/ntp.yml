@@ -1,0 +1,6 @@
+- name: Install NTP server daemon.
+  apt:
+    name: ntp
+    state: latest
+  notify: enable and restart ntp
+  tags: ntp,time

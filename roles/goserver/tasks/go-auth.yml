@@ -1,0 +1,19 @@
+---
+- name: Update cache and install python-passlib
+  apt:
+    name: python-passlib
+    state: present
+    update_cache: yes
+  tags: gocd,gocd-auth-setup
+
+- name: Set htpasswd authentication on GOCD with "user:user"
+  htpasswd: 
+    path: /etc/go/passwdfile
+    crypt_scheme: ldap_sha1
+    name: "{{ item.value.name }}"
+    password: "{{ item.value.pass }}"
+    owner: go
+    group: go
+    mode: 0600
+  with_dict: "{{ goauth_users }}"
+  tags: gocd,gocd-auth-setup

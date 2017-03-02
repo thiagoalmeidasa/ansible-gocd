@@ -1,0 +1,16 @@
+---
+
+#- include: roles/common/tasks/iptables.yml
+#  tags: security
+
+- include: roles/common/tasks/ntp.yml
+  tags: ntp
+
+- include: roles/common/tasks/timezone.yml
+  tags: time
+
+- include: roles/common/tasks/update.yml
+  tags: update
+
+- include: roles/common/tasks/locale.yml
+  tags: locale

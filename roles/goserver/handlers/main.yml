@@ -1,0 +1,9 @@
+---
+- name: start go-server
+  service: name=go-server state=started enabled=yes
+  tags: gocd,gocd-setup
+
+- name: restart go-server
+  service: name=go-server state=restarted enabled=yes
+  tags: gocd,gocd-setup
+

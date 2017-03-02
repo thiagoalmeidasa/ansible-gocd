@@ -1,0 +1,92 @@
+---
+- name: Install docker elastic agents
+  when: '"docker-agent" in goserver_plugins'
+  get_url:
+    url: https://github.com/gocd-contrib/docker-elastic-agents/releases/download/v0.6.1/docker-elastic-agents-0.6.1.jar
+    dest: /var/lib/go-server/plugins/external/
+    backup: yes
+  notify: restart go-server
+  tags: gocd-plugins,gocd-plugins-dea
+
+- name: Add go user to docker group
+  user:
+    name: go
+    groups: docker
+    append: yes
+  notify: restart go-server
+  tags: gocd-plugins,gocd-plugins-dea
+
+- name: Build docker image for Maven elastic-agent
+  command: docker build -t gocd-agent:maven-3-jdk-8 https://github.com/thiagoalmeidasa/docker-gocd-agent-maven.git
+  tags: gocd-plugins,gocd-plugins-dea
+
+- name: Install email notifier plugin dependencies
+  when: '"email-notifier" in goserver_plugins'
+  apt:
+    name:
+      - openjdk-8-jdk-headless
+      - unzip
+    state: present
+  tags: gocd-plugins,gocd-plugins-email
+
+- name: Install maven bin for email notifier plugin
+  when: '"email-notifier" in goserver_plugins'
+  unarchive:
+    src: http://www-us.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.zip
+    dest: /srv/
+    remote_src: True
+  tags: gocd-plugins,gocd-plugins-email
+
+- name: Get email notifier plugin
+  when: '"email-notifier" in goserver_plugins'
+  git:
+    repo: https://github.com/gocd-contrib/email-notifier.git
+    dest: /srv/email-notifier
+  tags: gocd-plugins,gocd-plugins-email
+
+- name: Build and install email notifier plugin
+  shell: |
+      cd /srv/email-notifier && \
+      /srv/apache-maven-3.3.9/bin/mvn clean package -DskipTests && \
+      cp /srv/email-notifier/dist/email-notifier-0.1.jar /var/lib/go-server/plugins/external/ && \
+      exit 0
+  notify: restart go-server
+  tags: gocd-plugins,gocd-plugins-email
+
+- name: Clean email notifier environment
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /srv/email-notifier
+    - /srv/apache-maven-3.3.9
+  tags: gocd-plugins,gocd-plugins-email
+
+- name: Uninstall email notifier plugin dependencies
+  when: '"email-notifier" in goserver_plugins'
+  apt:
+    name:
+      - openjdk-8-jdk-headless
+      - unzip
+    state: absent
+    autoremove: yes
+  tags: gocd-plugins,gocd-plugins-email
+
+- name: Install script executor task plugin
+  when: '"script-executor-task" in goserver_plugins'
+  get_url:
+    url: https://github.com/gocd-contrib/script-executor-task/releases/download/0.3/script-executor-0.3.0.jar
+    dest: /var/lib/go-server/plugins/external/
+    backup: yes
+  notify: restart go-server
+  tags: gocd-plugins,gocd-plugins-script
+
+- name: Install Debian repository poller plugin
+  when: '"deb-repo-poller" in goserver_plugins'
+  get_url:
+    url: https://github.com/gocd-contrib/deb-repo-poller/releases/download/1.3/deb-repo-poller-1.3.jar
+    dest: /var/lib/go-server/plugins/external/
+    backup: yes
+  notify: restart go-server
+  tags: gocd-plugins,gocd-plugins-deb-repo
+

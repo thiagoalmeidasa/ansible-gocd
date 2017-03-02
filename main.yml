@@ -1,0 +1,10 @@
+---
+- name: Top level playbook.
+  hosts: server
+  remote_user: root
+  roles:
+    - common
+    - docker
+    - goserver
+  vars_files:
+    - vars/goauth.yml

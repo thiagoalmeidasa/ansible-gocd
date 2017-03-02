@@ -1,0 +1,7 @@
+---
+- include: roles/goserver/tasks/go-server.yml
+
+- include: roles/goserver/tasks/go-auth.yml
+
+- include: roles/goserver/tasks/go-plugins.yml
+

@@ -1,0 +1,5 @@
+[server]
+server.go.local ansible_host=192.168.0.26
+
+[all]
+server.go.local ansible_host=192.168.0.26

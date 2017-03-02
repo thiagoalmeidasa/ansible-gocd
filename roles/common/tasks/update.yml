@@ -1,0 +1,9 @@
+- name: Ensure the cache is updated.
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  tags: update
+- name: Ensure the packages are upgraded.
+  apt:
+    upgrade: dist
+  tags: update

@@ -1,0 +1,7 @@
+---
+- name: enable and restart ntp
+  service:
+    name: ntp
+    state: restarted
+    enabled: yes
+  tags: time

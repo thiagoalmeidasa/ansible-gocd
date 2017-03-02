@@ -1,0 +1,59 @@
+- name: Accept established connections.
+  iptables:
+    chain: INPUT
+    ctstate: ESTABLISHED,RELATED
+    jump: ACCEPT
+  tags: iptables,security
+
+- name: Accept localhost connections.
+  iptables:
+    chain: INPUT
+    in_interface: lo
+    jump: ACCEPT
+  tags: iptables,security
+
+- name: Accept ICMP packages.
+  iptables:
+    chain: INPUT
+    protocol: icmp
+    jump: ACCEPT
+  tags: iptables,security
+
+- name: Accept SSH connections.
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 22
+    jump: ACCEPT
+  tags: iptables,security
+
+- name: Accept HTTP connections.
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 8153
+    jump: ACCEPT
+  tags: iptables,security
+
+- name: Accept HTTPS connections.
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 8154
+    jump: ACCEPT
+  tags: iptables,security
+
+- name: Drop everything else.
+  iptables:
+    chain: INPUT
+    jump: DROP
+  tags: iptables,security
+
+- name: install iptables persistent
+  environment:
+     DEBIAN_FRONTEND: noninteractive
+  apt:
+    name: iptables-persistent
+    state: latest
+  tags: iptables,security
+

@@ -1,0 +1,32 @@
+---
+- name: Update cache and install some docker dependencies
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+    state: present
+    update_cache: yes
+  tags: gocd-plugins-dea,docker
+
+- name: Receive apt-key from docker server
+  apt_key:
+    url: https://apt.dockerproject.org/gpg
+    state: present
+  tags: gocd-plugins-dea,docker
+
+- name: Enable docker repo
+  apt_repository:
+    repo: deb https://apt.dockerproject.org/repo/ debian-jessie main
+    state: present
+    filename: 'docker'
+  tags: gocd-plugins-dea,docker
+
+- name: Update cache and install docker
+  apt:
+    name: docker-engine
+    state: present
+    update_cache: yes
+  notify: restart docker
+  tags: gocd-plugins-dea,docker
