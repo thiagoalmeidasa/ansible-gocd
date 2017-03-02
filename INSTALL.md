@@ -105,7 +105,11 @@ see what can be modified.
 
 ### Adding new users:
 
-Edit `vars/goauth.yml`.
+Edit `vars/goauth.yml` with:
+
+```bash
+ansible-vault --ask-vault-pass edit vars/goauth.yml
+```
 
 The content looks like:
 
