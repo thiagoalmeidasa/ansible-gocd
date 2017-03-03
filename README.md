@@ -4,7 +4,7 @@ GOCD Challenge
 
 <!-- vim-markdown-toc GFM -->
 * [What is it?](#what-is-it)
-* [Why didn't I use the official ansible-gocd??](#why-didnt-i-use-the-official-ansible-gocd)
+* [Why didn't I use the official ansible-gocd?](#why-didnt-i-use-the-official-ansible-gocd)
 * [Features](#features)
 * [How it works?](#how-it-works)
     * [Quick start](#quick-start)
@@ -16,7 +16,7 @@ GOCD Challenge
 The goal of this project is install and do some configuration in a new
 instance of [GOCD](https://www.gocd.io/) running in a Debian 8.
 
-## Why didn't I use the official ansible-gocd??
+## Why didn't I use the official ansible-gocd?
 
 This project was part of a job selection process and by the rules I need to
 install manually my own instance of GOCD.
@@ -25,8 +25,8 @@ install manually my own instance of GOCD.
 
 What is happening here?
 
-* Some basic configurations like locale, ntp, timezone and some iptables input
-  block are done.
+* Some basic configurations like locale, ntp, timezone, swap and some iptables
+  input block are done.
 * A fresh installation of GOCD from official deb repository. 
 * Install some GOCD plugins for:
 	- Elastic agents with docker;

@@ -1,7 +1,7 @@
 ---
 
-#- include: roles/common/tasks/iptables.yml
-#  tags: security
+- include: roles/common/tasks/iptables.yml
+  tags: security
 
 - include: roles/common/tasks/ntp.yml
   tags: ntp
@@ -14,3 +14,6 @@
 
 - include: roles/common/tasks/locale.yml
   tags: locale
+
+- include: roles/common/tasks/swap.yml
+  tags: swap

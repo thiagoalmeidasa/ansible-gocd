@@ -3,3 +3,7 @@
 goserver_plugins: 'docker-agent deb-repo-poller email-notifier script-executor-task'
 GO_SERVER_SYSTEM_PROPERTIES: '-Dmail.smtp.starttls.enable=true'
 
+# Swap vars
+swap_size: 2GB
+swap_swappiness: 10
+swap_path: /swap

@@ -1,0 +1,6 @@
+---
+swap_path: /swap
+swap_size: False
+swap_swappiness: False
+swap_vfs_cache_pressure: False
+swap_use_dd: False

@@ -1,0 +1,46 @@
+---
+- name: Create swap file
+  command: |
+    {% if swap_use_dd %}
+    dd if=/dev/zero of={{ swap_path }} bs=1M count={{ swap_size }} creates={{ swap_path }}
+    {% else %}
+    fallocate -l {{ swap_size }} {{ swap_path }} creates={{ swap_path }}
+    {% endif %}
+  register: write_swap
+  when: swap_size != false
+
+- name: Set swap permissions
+  file:
+    path: "{{ swap_path }}"
+    mode: 600
+  when: swap_size != false
+
+- name: Make swap
+  command: mkswap {{ swap_path }}
+  environment:
+    PATH: "{{ (ansible_env|default({})).PATH|default('') }}:/usr/local/sbin:/usr/sbin:/sbin"
+  register: create_swap
+  when: swap_size != false and write_swap.changed
+
+- name: Enable swap
+  command: swapon {{ swap_path }}
+  environment:
+    PATH: "{{ (ansible_env|default({})).PATH|default('') }}:/usr/local/sbin:/usr/sbin:/sbin"
+  when: swap_size != false and create_swap.changed
+
+- name: Add swap to /etc/fstab
+  lineinfile:
+    dest: /etc/fstab
+    line: "{{ swap_path }}   none    swap    sw    0   0"
+    state: present
+  when: swap_size != false
+
+- name: Configure vm.swappiness
+  lineinfile:
+    dest: /etc/sysctl.conf
+    line: "vm.swappiness = {{ swap_swappiness }}"
+    regexp: "^vm.swappiness[\\s]?="
+    state: present
+  notify: reload sysctl
+  when: swap_swappiness != false
+

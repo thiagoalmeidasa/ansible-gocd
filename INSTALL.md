@@ -12,6 +12,7 @@ INSTALL instructions
     * [Changing GO Server startup options](#changing-go-server-startup-options)
     * [Choosing GOCD plugins](#choosing-gocd-plugins)
     * [Changing the timezone](#changing-the-timezone)
+    * [Adding swap](#adding-swap)
 * [Configuring Plugins](#configuring-plugins)
     * [Docker Elastic Agent](#docker-elastic-agent)
     * [Email Notifier](#email-notifier)
@@ -47,13 +48,17 @@ playbooks/
 │   ├── common/ # Basic configuration.
 │   │   ├── handlers/
 │   │   │   ├── main.yml
+│   │   │   ├── swap.yml
 │   │   │   └── ntp.yml
+│   │   ├── defaults/
+│   │   │   └── main.yml # Some default vars
 │   │   └── tasks/
 │   │       ├── main.yml
 │   │       ├── iptables.yml
 │   │       ├── locale.yml
 │   │       ├── ntp.yml
 │   │       ├── timezone.yml
+│   │       ├── swap.yml
 │   │       └── update.yml
 │   ├── docker/ # Take care of docker installation
 │   │   ├── files/
@@ -181,6 +186,22 @@ timezone: America/Belem
 
 to your new value.
 
+### Adding swap
+
+To create a new swap file you will need to setup some environment variables on
+server `host_vars` or `group_vars`.
+
+The available variables with their default values are:
+
+```
+swap_path: /swap
+swap_size: False
+swap_swappiness: False
+swap_vfs_cache_pressure: False
+swap_use_dd: False
+```
+
+Only `swap_size` is mandatory and you can use `MB` or `GB` as unit of value.
 
 ## Configuring Plugins
 
@@ -247,3 +268,5 @@ STARTTLS instead of SMTPS.
 * The release version of **email-notifier** plugin is too old to be used
 sending notifications for specific state of a pipeline, so I needed to build a
 new version from master branch of the public repository on github.
+
+* The entire swap configuration is based in: https://github.com/kamaln7/ansible-swapfile

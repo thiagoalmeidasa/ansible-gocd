@@ -2,3 +2,6 @@
 
 - include: roles/common/handlers/ntp.yml
   tags: time,ntp
+
+- include: roles/common/handlers/swap.yml
+  tags: swap
